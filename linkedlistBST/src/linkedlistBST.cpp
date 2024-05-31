@@ -1,183 +1,101 @@
-#include <iostream>
-#include "Linkedlist.h"
-class LinkedListBST {
-private:
+ #include <iostream>
+ #include"Linkedlist.h"
+ #include "bst.h"
+ class BST {
+public:
     Node* root;
 
-public:
-    LinkedListBST() {
+    BST() {
         root = nullptr;
     }
 
-    void insert(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->left = nullptr;
-        newNode->right = nullptr;
-
-        if (root == nullptr) {
-            root = newNode;
-        } else {
-            Node* current = root;
-            while (true) {
-                if (value < current->data) {
-                    if (current->left == nullptr) {
-                        current->left = newNode;
-                        break;
-                    } else {
-                        current = current->left;
-                    }
-                } else {
-                    if (current->right == nullptr) {
-                        current->right = newNode;
-                        break;
-                    } else {
-                        current = current->right;
-                    }
-                }
-            }
-        }
+    ~BST() {
+        destroy(root);
     }
 
-    void display(Node* node) {
-        if (node != nullptr) {
-            display(node->left);
-            std::cout << node->data << " ";
-            display(node->right);
-        }
+    bool isEmpty() {
+        return root == nullptr;
     }
 
-    void displayTree() {
-        display(root);
-        std::cout << std::endl;
+    void addBST(int key) {
+        root = insert(root, key);
     }
 
-    bool search(int value) {
-        Node* current = root;
-        while (current != nullptr) {
-            if (value == current->data) {
-                return true;
-            } else if (value < current->data) {
-                current = current->left;
-            } else {
-                current = current->right;
-            }
-        }
-        return false;
+    bool searchBST(int targetKey) {
+        return search(root, targetKey) != nullptr;
     }
 
-    bool remove(int value) {
-        Node* parent = nullptr;
-        Node* current = root;
-
-        while (current != nullptr) {
-            if (value == current->data) {
-                break;
-            } else {
-                parent = current;
-                if (value < current->data) {
-                    current = current->left;
-                } else {
-                    current = current->right;
-                }
-            }
-        }
-
-        if (current == nullptr) {
-            return false;
-        }
-
-        if (current->left == nullptr && current->right == nullptr) {
-            if (current == root) {
-                root = nullptr;
-            } else if (current == parent->left) {
-                parent->left = nullptr;
-            } else {
-                parent->right = nullptr;
-            }
-            delete current;
-        } else if (current->left == nullptr) {
-            if (current == root) {
-                root = current->right;
-            } else if (current == parent->left) {
-                parent->left = current->right;
-            } else {
-                parent->right = current->right;
-            }
-            delete current;
-        } else if (current->right == nullptr) {
-            if (current == root) {
-                root = current->left;
-            } else if (current == parent->left) {
-                parent->left = current->left;
-            } else {
-                parent->right = current->left;
-            }
-            delete current;
-        } else {
-            Node* successor = getSuccessor(current);
-            if (current == root) {
-                root = successor;
-            } else if (current == parent->left) {
-                parent->left = successor;
-            } else {
-                parent->right = successor;
-            }
-            successor->left = current->left;
-            delete current;
-        }
-
-        return true;
+    void removeBST(int keyToDelete) {
+        root = remove(root, keyToDelete);
     }
 
+ 
 private:
-    Node* getSuccessor(Node* node) {
-        Node* parent = node;
-        Node* successor = node;
-        Node* current = node->right;
+    Node* insert(Node* node, int key) {
+        if (node == nullptr) {
+            return new Node(key);
+        }
+        if (key < node->key) {
+            node->left = insert(node->left, key);
+        } else if (key > node->key) {
+            node->right = insert(node->right, key);
+        }
+        return node;
+    }
 
-        while (current != nullptr) {
-            parent = successor;
-            successor = current;
+    Node* search(Node* node, int key) {
+        if (node == nullptr || node->key == key) {
+            return node;
+        }
+        if (key < node->key) {
+            return search(node->left, key);
+        }
+        return search(node->right, key);
+    }
+
+    Node* remove(Node* node, int key) {
+        if (node == nullptr) {
+            return node;
+        }
+
+        if (key < node->key) {
+            node->left = remove(node->left, key);
+        } else if (key > node->key) {
+            node->right = remove(node->right, key);
+        } else {
+            // Node with only one child or no child
+            if (node->left == nullptr) {
+                Node* temp = node->right;
+                delete node;
+                return temp;
+            } else if (node->right == nullptr) {
+                Node* temp = node->left;
+                delete node;
+                return temp;
+            }
+            Node* temp = minValueNode(node->right);
+
+            node->key = temp->key;
+            node->right = remove(node->right, temp->key);
+        }
+        return node;
+    }
+
+    Node* minValueNode(Node* node) {
+        Node* current = node;
+
+        while (current && current->left != nullptr) {
             current = current->left;
         }
 
-        if (successor != node->right) {
-            parent->left = successor->right;
-            successor->right = node->right;
-        }
+        return current;
+    }
 
-        return successor;
+    void destroy(Node* node) {
+        if (node != nullptr) {
+            destroy(node->left);
+            destroy(node->right);
+            delete node;
+        }
     }
 };
-
-int main() {
-    LinkedListBST bst;
-    bst.insert(5);
-    bst.insert(3);
-    bst.insert(7);
-    bst.insert(1);
-    bst.insert(4);
-    bst.insert(6);
-    bst.insert(8);
-
-    bst.displayTree();
-
-    int valueToSearch = 4;
-    if (bst.search(valueToSearch)) {
-        std::cout << valueToSearch << " is found in the BST." << std::endl;
-    } else {
-        std::cout << valueToSearch << " is not found in the BST." << std::endl;
-    }
-
-    int valueToRemove = 7;
-    if (bst.remove(valueToRemove)) {
-        std::cout << valueToRemove << " is removed from the BST." << std::endl;
-    } else {
-        std::cout << valueToRemove << " is not found in the BST." << std::endl;
-    }
-
-    bst.displayTree();
-
-    return 0;
-}
