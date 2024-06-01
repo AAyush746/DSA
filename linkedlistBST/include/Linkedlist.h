@@ -27,11 +27,5 @@ class LLBST: public Node{
         bool searchBST(int targetKey);
         void removeBST(int keyToDelete);
 
-    private:
-        Node* insert(Node* node, int key);
-        Node* search(Node* node, int key);
-        Node* remove(Node* node, int key);
-        Node* minValueNode(Node* node);
-        void destroy(Node* node);
 };
 #endif
