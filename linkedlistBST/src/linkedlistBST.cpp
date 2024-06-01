@@ -1,37 +1,23 @@
  #include <iostream>
  #include"Linkedlist.h"
- #include "bst.h"
- class BST {
-public:
-    Node* root;
 
-    BST() {
-        root = nullptr;
-    }
-
-    ~BST() {
-        destroy(root);
-    }
-
-    bool isEmpty() {
+    bool LLBST:: isEmpty() {
         return root == nullptr;
     }
 
-    void addBST(int key) {
+    void LLBST ::addBST(int key) {
         root = insert(root, key);
     }
 
-    bool searchBST(int targetKey) {
+    bool LLBST :: searchBST(int targetKey) {
         return search(root, targetKey) != nullptr;
     }
 
-    void removeBST(int keyToDelete) {
+    void  LLBST :: removeBST(int keyToDelete) {
         root = remove(root, keyToDelete);
     }
 
- 
-private:
-    Node* insert(Node* node, int key) {
+    Node* LLBST::insert(Node* node, int key) {
         if (node == nullptr) {
             return new Node(key);
         }
@@ -43,7 +29,7 @@ private:
         return node;
     }
 
-    Node* search(Node* node, int key) {
+    Node* LLBST :: search(Node* node, int key) {
         if (node == nullptr || node->key == key) {
             return node;
         }
@@ -53,7 +39,7 @@ private:
         return search(node->right, key);
     }
 
-    Node* remove(Node* node, int key) {
+    Node* LLBST::remove(Node* node, int key) {
         if (node == nullptr) {
             return node;
         }
@@ -81,7 +67,7 @@ private:
         return node;
     }
 
-    Node* minValueNode(Node* node) {
+    Node* LLBST ::minValueNode(Node* node) {
         Node* current = node;
 
         while (current && current->left != nullptr) {
@@ -91,11 +77,10 @@ private:
         return current;
     }
 
-    void destroy(Node* node) {
+    void LLBST :: destroy(Node* node) {
         if (node != nullptr) {
             destroy(node->left);
             destroy(node->right);
             delete node;
         }
     }
-};
