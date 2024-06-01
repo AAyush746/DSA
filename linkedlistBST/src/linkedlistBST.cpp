@@ -12,90 +12,78 @@
         return false;}
     }
 
-    void LLBST ::addBST(int key) {
-        root = insert(root, key);
+  void LLBST::addBST(int key) {
+    if (root == NULL) {
+        root = new Node(key);
+        return;
     }
 
+    Node* temp = root;
+    Node* parent = NULL;
+
+    while (temp != NULL) {
+        parent = temp;
+        if (key < temp->key) {
+            temp = temp->left;
+        } else if (key > temp->key) {
+            temp = temp->right;
+        } 
+    }
+
+    if (key < parent->key) {
+        parent->left = new Node(key);
+    } else {
+        parent->right = new Node(key);
+    }
+}
     bool LLBST :: searchBST(int targetKey) {
-        if (search(root, targetKey) != nullptr){
-        std::cout << "The key is in the tree" << std::endl;
-        return true;
+    bool found = false;
+    if(this->isEmpty()){
+        std::cout << "\n the list is empty\n";
+    }
+    else{
+        Node* temp = this->root;
+
+       
+       while (temp!=NULL){
+            if(temp->key == targetKey){
+                found = true;
+                break;
+            }
+            else if(temp->key<targetKey){
+                temp=temp->right;
+            }
+            else if(temp->key>targetKey){
+                temp=temp->left;
+            }
         }
-        else{
-            std::cout << "The key is not in the tree" << std::endl;
-            return false;
-        }
+    }
         
     }
 
-    void  LLBST :: removeBST(int keyToDelete) {
-        root = remove(root, keyToDelete);
+ void LLBST::removeBST(int key) {
+    if (root == NULL) {
+        std::cout << "Tree is empty\n";
+        return;
+    }
+    Node* temp = root;
+
+    while (temp != NULL) {
+        if(temp->key != key){
+            delete temp;
+            break;
+        }
+        
+       else if (key < temp->key) {
+            temp = temp->left;
+        } 
+        else {
+            temp = temp->right;
+        }
     }
 
-    Node* LLBST::insert(Node* node, int key) {
-        if (node == nullptr) {
-            return new Node(key);
-        }
-        if (key < node->key) {
-            node->left = insert(node->left, key);
-        } else if (key > node->key) {
-            node->right = insert(node->right, key);
-        }
-        return node;
+    if (temp == NULL) {
+        std::cout << "Key not found in the tree\n";
+        return;
     }
-
-    Node* LLBST :: search(Node* node, int key) {
-        if (node == nullptr || node->key == key) {
-            return node;
-        }
-        if (key < node->key) {
-            return search(node->left, key);
-        }
-        return search(node->right, key);
-    }
-
-    Node* LLBST::remove(Node* node, int key) {
-        if (node == nullptr) {
-            return node;
-        }
-
-        if (key < node->key) {
-            node->left = remove(node->left, key);
-        } else if (key > node->key) {
-            node->right = remove(node->right, key);
-        } else {
-            // Node with only one child or no child
-            if (node->left == nullptr) {
-                Node* temp = node->right;
-                delete node;
-                return temp;
-            } else if (node->right == nullptr) {
-                Node* temp = node->left;
-                delete node;
-                return temp;
-            }
-            Node* temp = minValueNode(node->right);
-
-            node->key = temp->key;
-            node->right = remove(node->right, temp->key);
-        }
-        return node;
-    }
-
-    Node* LLBST ::minValueNode(Node* node) {
-        Node* current = node;
-
-        while (current && current->left != nullptr) {
-            current = current->left;
-        }
-
-        return current;
-    }
-
-    void LLBST :: destroy(Node* node) {
-        if (node != nullptr) {
-            destroy(node->left);
-            destroy(node->right);
-            delete node;
-        }
-    }
+ }
