@@ -1,5 +1,5 @@
-#include <iostream>
-
+#ifndef LINKEDLIST_H
+#define LINKEDLIST_H
 class Node {
 public:
     int key;
@@ -34,3 +34,4 @@ class LLBST: public Node{
         Node* minValueNode(Node* node);
         void destroy(Node* node);
 };
+#endif

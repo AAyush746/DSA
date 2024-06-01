@@ -1,6 +1,7 @@
  #include <iostream>
  #include"Linkedlist.h"
 
+
     bool LLBST:: isEmpty() {
         return root == nullptr;
     }
