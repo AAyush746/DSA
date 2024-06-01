@@ -1,4 +1,4 @@
-#include "BST.h"
+#include "bst.h"
 #include <iostream>
 
 class BSTArray : public BST {
@@ -73,3 +73,31 @@ public:
     }
   }
 };
+int main() {
+  BSTArray b;
+
+  // Add elements
+  b.addBST(5);
+  b.addBST(3);
+  b.addBST(8);
+
+  // Search for elements
+  if (b.searchBST(3)) {
+    std::cout << "Found 3" << std::endl;
+  } else {
+    std::cout << "3 not found" << std::endl;
+  }
+
+  if (b.searchBST(10)) {
+    std::cout << "Found 10" << std::endl;
+  } else {
+    std::cout << "10 not found" << std::endl;
+  }
+
+  // Remove element
+  b.removeBST(5);
+
+  // Additional operations...
+
+  return 0;
+}
