@@ -2,7 +2,7 @@
 #include"Linkedlist.h"
  int main(){
     LLBST tree1;
-    std::cout << "\nIs the tree empty?\n " << tree1.isEmpty() << std::endl;
+    std::cout << "\nIs the tree empty?\n " << (tree1.isEmpty()? "yes": "no") << std::endl;
 
     std::cout << "\nAdding 10 and 5 to the tree\n" << std::endl;
     tree1.addBST(10);

@@ -1,8 +1,15 @@
  #include <iostream>
  #include"Linkedlist.h"
 
+
     bool LLBST:: isEmpty() {
-        return root == nullptr;
+        if(root == nullptr){
+        
+        return true;
+        }
+        else{
+        
+        return false;}
     }
 
     void LLBST ::addBST(int key) {
@@ -10,7 +17,15 @@
     }
 
     bool LLBST :: searchBST(int targetKey) {
-        return search(root, targetKey) != nullptr;
+        if (search(root, targetKey) != nullptr){
+        std::cout << "The key is in the tree" << std::endl;
+        return true;
+        }
+        else{
+            std::cout << "The key is not in the tree" << std::endl;
+            return false;
+        }
+        
     }
 
     void  LLBST :: removeBST(int keyToDelete) {
